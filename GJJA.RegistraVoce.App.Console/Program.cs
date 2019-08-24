@@ -63,7 +63,7 @@ namespace GJJA.RegistraVoce.App.Console
                 person.Phone = UI.ReadLine();
                 PersonDAO personDAO = new PersonDAO();
                 personDAO.Insert(person);
-                UI.WriteLine(" ** Pessoa cadastra com sucesso!** ");
+                UI.WriteLine(" *** Pessoa cadastra com sucesso!*** ");
 
             }
             catch (Exception ex)
