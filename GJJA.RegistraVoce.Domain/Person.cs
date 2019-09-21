@@ -14,6 +14,8 @@ namespace GJJA.RegistraVoce.Domain
         public MaritalStatus  MaritalStatus { get; set; }
         public string Address  { get; set; }
         public string Phone { get; set; }
+
+        public string Bla {get; set;}
     }
 
 }
