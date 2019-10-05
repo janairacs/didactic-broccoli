@@ -15,7 +15,7 @@ namespace GJJA.RegistraVoce.Domain
         public string Address  { get; set; }
         public string Phone { get; set; }
 
-        public string Bla {get; set;}
+       // public string Bla {get; set;}
     }
 
 }
