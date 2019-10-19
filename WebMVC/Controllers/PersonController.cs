@@ -1,20 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
+using WebMVC.Models;
+using WebMVC.Factories;
+using System;
 using GJJA.RegistraVoce.Domain;
 using GJJA.RegistraVoce.Domain.Enums;
-using WebMVC.Models;
-using System;
+using GJJA.ResgistraVoce.DataAccess.Entity.Context;
+using GJJA.Repository.Common.Interfaces;
+using GJJA.RegistraVoce.Repository.Entity;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
 namespace WebMVC.Controllers
 {
+   
     public class PersonController : Controller
     {
+        public ListPersonModel model;
+        public PersonController()
+        {
+            model = new ListPersonModel();
+            SetUp();
+        }
+         private static ServiceProvider _serviceProvider;
 
 
         public IActionResult Index()
         {
-            return View();
+            LoadPeople();     
+            model.EditPerson.Name = "Olá" ;  
+            
+            return View (model);     
         }
+
+        
 
 
 
@@ -32,7 +51,59 @@ namespace WebMVC.Controllers
             model.MaritalStatus = MaritalStatus.Single;
             return View(model);
 
+        }
 
+        public IActionResult DeletePerson(Int32 personId)
+        {
+              ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
+              personRepository.DeleteById(personId);
+              LoadPeople();
+              return View("Index", model);
+
+           // return View();
+        }
+        public IActionResult InsertPerson()
+        {
+            ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
+            personRepository.Insert(model.EditPerson);
+            LoadPeople();
+            return View("Index", model);
+        }
+
+
+
+        private void LoadPeople ()
+        {
+             
+            ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
+            List<Person> people = personRepository.Select();
+            model =  new ListPersonModel(people);              
+           
+           // personRepository.DeleteById(personId);
+            
+        }        
+
+          private static void SetUp()
+        {
+           
+
+            IServiceCollection services = new ServiceCollection();
+            services.AddSingleton<RegistraVoceDbContext>((provider) =>
+            {
+                return new WebMVCDbContextFactory().CreateDbContext(new string[] { });
+            });
+            services.AddScoped<ICrudRepository<Person, int>, PersonRepository>();
+            _serviceProvider = services.BuildServiceProvider();
+
+        }
+
+        public  IActionResult EditPerson(Int32 personId)
+        {
+            ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
+            Person p = personRepository.SelectById(personId);
+            LoadPeople();
+            model.EditPerson = p;
+            return View("Index", model);
         }
     }
 }
