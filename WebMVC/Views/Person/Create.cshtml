@@ -1,0 +1,74 @@
+@model PersonModel
+@using GJJA.RegistraVoce.Domain.Enums
+
+@{
+    ViewData["Title"] = "Create Person Page";
+}
+
+<h2>***Create Person Page***</h2>
+
+ <strong>
+     @Html.ActionLink("List all","Index","Person")
+
+</strong>
+
+@using (Html.BeginForm("Insert", "Person", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <th> Parameter </th>
+            <th> Value </th>
+        </tr>
+        <tr>
+            <th> Name </th>
+            <td>@Html.EditorFor(m => m.Name , new{ @class="form-control"})</td>
+        </tr>
+        <tr>
+            <th> Gender </th>
+            <td>@Html.DropDownListFor(m => m.Gender,new SelectList(Enum.GetValues(typeof(Gender))), new{ @class="form-control"})
+                
+                <!-- /* outra forma de aplicar
+                (m => m.Gender,new List<SelectListItem>{ 
+                new SelectListItem { Text = "Male", Value = "0"},
+                new SelectListItem { Text = "Female", Value = "1"},
+                new SelectListItem { Text = "No Info", Value = "2"}
+                })*/ -->
+            </td>
+        </tr>
+        <tr>
+            <th> Document Number </th>
+            <td>@Html.EditorFor(m => m.DocumentNumber, new{ @class="form-control"})</td>
+        </tr>
+        <tr>
+            <th> Identification </th>
+            <td>@Html.EditorFor(m => m.Identification, new{ @class="form-control"})</td>
+        </tr>
+         <tr>
+             <th> Birth Date </th>
+             <td>@Html.EditorFor(m => m.BirthDate, new{ @class="form-control"})</td>
+        </tr>
+        <tr>
+             <th> Marital Status </th>
+             <td>@Html.DropDownListFor(m=> m.MaritalStatus,new SelectList(Enum.GetValues(typeof(MaritalStatus))), new{ @class="form-control"})
+<!--                  
+                 ,new List<SelectListItem>{ 
+                new SelectListItem { Text = "Single", Value = "0"},
+                new SelectListItem { Text = "Married", Value = "1"},
+                new SelectListItem { Text = "Divorced", Value = "2"},
+                new SelectListItem { Text = "Widowed", Value = "3"}
+            }) -->
+            
+            </td>
+        </tr>
+        <tr>
+             <th> Address </th>
+             <td>@Html.EditorFor(m => m.Address, new{ @class="form-control"})</td>
+        </tr>
+        <tr>
+             <th> Phone </th>
+             <td>@Html.EditorFor(m => m.Phone, new{ @class="form-control"})</td>
+        </tr>
+
+    </table>
+    <input type = "submit" value = "Save Person"/>
+}

@@ -33,7 +33,11 @@ namespace WebMVC.Controllers
             return View (model);     
         }
 
-        
+        public IActionResult Create ()
+        {
+            var model = new PersonModel();
+            return View(model);
+        }
 
 
 
@@ -62,14 +66,30 @@ namespace WebMVC.Controllers
 
            // return View();
         }
-        public IActionResult InsertPerson()
+        public IActionResult Insert(Person person)
         {
             ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
-            personRepository.Insert(model.EditPerson);
+            personRepository.Insert(person);
             LoadPeople();
             return View("Index", model);
         }
 
+         public IActionResult Update(Person person)
+        {
+            ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
+            personRepository.Update(person);
+            LoadPeople();
+            return View("Index", model);
+        }
+
+     public IActionResult Edit (int personId)
+     {
+         ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
+         var person = personRepository.SelectById (personId);
+         PersonModel model = new PersonModel(person);
+         
+         return View (model);
+    }
 
 
         private void LoadPeople ()
@@ -97,13 +117,6 @@ namespace WebMVC.Controllers
 
         }
 
-        public  IActionResult EditPerson(Int32 personId)
-        {
-            ICrudRepository<Person, int> personRepository = _serviceProvider.GetService<ICrudRepository<Person, int>>();
-            Person p = personRepository.SelectById(personId);
-            LoadPeople();
-            model.EditPerson = p;
-            return View("Index", model);
-        }
+    
     }
 }
